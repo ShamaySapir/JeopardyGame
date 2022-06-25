@@ -12,9 +12,8 @@ import {
   Toolbar,
   IconButton,
   Typography,
-  // Grid,
+  Grid,
   Slide,
-  // Link,
 } from "@mui/material";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -22,9 +21,10 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 const Card = (props) => {
-  const { prize, question, answer } = props;
+  const { prize, id } = props;
   const [open, setOpen] = React.useState(false);
-
+  const question = "";
+  const answer = "";
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -33,7 +33,7 @@ const Card = (props) => {
     setOpen(false);
   };
   return (
-    <>
+    <Grid item xs>
       <div className={styles.card} onClick={handleClickOpen}>
         <h2>{prize}</h2>
       </div>
@@ -74,7 +74,7 @@ const Card = (props) => {
           </ListItem>
         </List>
       </Dialog>
-    </>
+    </Grid>
   );
 };
 

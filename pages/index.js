@@ -1,9 +1,28 @@
 import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
-import Card from "../components/Card.js";
+import { Grid } from "@mui/material";
+import Card from "../components/Card";
+import { groupBy, map } from "lodash";
+import React, { useEffect, useState } from "react";
 
 export default function Home() {
+  const NUM_OF_ROWS = 5;
+  const NUM_OF_COLS = 5;
+
+  const [cards, setCards] = useState([]);
+  useEffect(() => {
+    const cardsData = Array.from(Array(NUM_OF_ROWS * NUM_OF_COLS).keys()).map(
+      (id) => ({
+        id,
+        level: Math.floor(id / NUM_OF_ROWS) + 1,
+        subject: "family" + Math.floor(id / NUM_OF_ROWS) + 1,
+      })
+    );
+
+    const groupedByLevel = groupBy(cardsData, "level");
+    setCards(groupedByLevel);
+  }, []);
   return (
     <div className={styles.container}>
       <Head>
@@ -12,56 +31,18 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-
-        <p className={styles.description}>
-          Get started by editing{" "}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
-
-        <div className={styles.grid}>
-          <Card prize="100" question="?" answer="!" />
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h2>Learn &rarr;</h2>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/canary/examples"
-            className={styles.card}
-          >
-            <h2>Examples &rarr;</h2>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h2>Deploy &rarr;</h2>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{" "}
-          <span className={styles.logo}>
-            <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-          </span>
-        </a>
-      </footer>
+      <main></main>
+      <Grid container>
+        {map(cards, (cardsLevel, level) => {
+          return (
+            <Grid container item key={level}>
+              {map(cardsLevel, ({ level, id }) => (
+                <Card key={id} prize={level * 100} id={id} />
+              ))}
+            </Grid>
+          );
+        })}
+      </Grid>
     </div>
   );
 }
