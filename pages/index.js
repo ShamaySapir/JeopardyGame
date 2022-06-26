@@ -17,6 +17,7 @@ export default function Home() {
         id,
         level: Math.floor(id / NUM_OF_ROWS) + 1,
         subject: "family" + Math.floor(id / NUM_OF_ROWS) + 1,
+        question: "family" + Math.floor(id / NUM_OF_ROWS) + 1,
       })
     );
 
@@ -35,11 +36,20 @@ export default function Home() {
       <Grid container>
         {map(cards, (cardsLevel, level) => {
           return (
-            <Grid container item key={level}>
-              {map(cardsLevel, ({ level, id }) => (
-                <Card key={id} prize={level * 100} id={id} />
+            // <Grid container direction="column">
+            <Grid
+              container
+              item
+              key={level}
+              direction="row"
+              padding={2}
+              spacing={2}
+            >
+              {map(cardsLevel, ({ level, id, ...rest }) => (
+                <Card key={id} prize={level * 100} {...rest} />
               ))}
             </Grid>
+            // </Grid>
           );
         })}
       </Grid>
