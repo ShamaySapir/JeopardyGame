@@ -40,10 +40,22 @@ export default function BasicCard({
   const [selectedIndex, setSelectedIndex] = React.useState(new Set());
 
   const onSelect = (ans, idx) => {
-    setSelected((selected) => new Set([...Array.from(selected), ans]));
-    setSelectedIndex(
-      (selectedIdx) => new Set([...Array.from(selectedIdx), idx])
-    );
+    if (selectedIndex.has(idx)) {
+      // remove answer
+      setSelectedIndex(
+        (selectedIdx) =>
+          new Set([...Array.from(selectedIdx)].filter((elem) => elem !== idx))
+      );
+      setSelected(
+        (selected) =>
+          new Set([...Array.from(selected)].filter((elem) => elem !== ans))
+      );
+    } else {
+      setSelectedIndex(
+        (selectedIdx) => new Set([...Array.from(selectedIdx), idx])
+      );
+      setSelected((selected) => new Set([...Array.from(selected), ans]));
+    }
   };
   return (
     <Dialog
