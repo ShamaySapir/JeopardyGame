@@ -3,26 +3,50 @@ import Image from "next/image";
 import styles from "../styles/Home.module.css";
 import { Grid } from "@mui/material";
 import Card from "../components/Card";
-import { groupBy, map } from "lodash";
+import { groupBy, map, reduce } from "lodash";
 import React, { useEffect, useState } from "react";
-
+import fetchClient from "../tools/requestor";
 export default function Home() {
   const NUM_OF_ROWS = 5;
   const NUM_OF_COLS = 5;
 
   const [cards, setCards] = useState([]);
-  useEffect(() => {
-    const cardsData = Array.from(Array(NUM_OF_ROWS * NUM_OF_COLS).keys()).map(
-      (id) => ({
-        id,
-        level: Math.floor(id / NUM_OF_ROWS) + 1,
-        subject: "family" + Math.floor(id / NUM_OF_ROWS) + 1,
-        question: "family" + Math.floor(id / NUM_OF_ROWS) + 1,
-      })
-    );
 
-    const groupedByLevel = groupBy(cardsData, "level");
-    setCards(groupedByLevel);
+  const getAllQuestions = async () => {
+    const rawQuestionsData = await fetchClient("listQuestions");
+    const questions = reduce(
+      rawQuestionsData.data,
+      (acc, questionData) => {
+        const question = {
+          id: questionData.id,
+          question: questionData.attributes.text,
+          subject: questionData.attributes.category.substr(1),
+          level: questionData.attributes.rank,
+          type: questionData.attributes.type,
+          possibleAnswers: questionData.attributes.possibleAnswers,
+        };
+        acc.push(question);
+        return acc;
+      },
+      []
+    );
+    return questions;
+  };
+  useEffect(() => {
+    async function fetchQuestions() {
+      const cardsData = await getAllQuestions();
+      const groupedByLevel = groupBy(cardsData, "level");
+      setCards(groupedByLevel);
+    }
+    // const cardsData = Array.from(Array(NUM_OF_ROWS * NUM_OF_COLS).keys()).map(
+    //   (id) => ({
+    //     id,
+    //     level: Math.floor(id / NUM_OF_ROWS) + 1,
+    //     subject: "family" + Math.floor(id / NUM_OF_ROWS) + 1,
+    //     question: "family" + Math.floor(id / NUM_OF_ROWS) + 1,
+    //   })
+    // );
+    fetchQuestions();
   }, []);
   return (
     <div className={styles.container}>
@@ -45,8 +69,8 @@ export default function Home() {
               padding={2}
               spacing={2}
             >
-              {map(cardsLevel, ({ level, id, ...rest }) => (
-                <Card key={id} prize={level * 100} {...rest} />
+              {map(cardsLevel, ({ id, ...rest }) => (
+                <Card key={id} {...rest} level={level} />
               ))}
             </Grid>
             // </Grid>
