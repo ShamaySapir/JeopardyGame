@@ -1,23 +1,27 @@
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
-import { Grid, Fab } from "@mui/material";
+import { Grid, Fab, Typography } from "@mui/material";
 import Card from "../components/Card";
-import { groupBy, map, reduce } from "lodash";
+import { groupBy, map, reduce, sortBy } from "lodash";
 import React, { useEffect, useState } from "react";
 import fetchClient from "../tools/requestor";
 export default function Home() {
-  const NUM_OF_ROWS = 5;
-  const NUM_OF_COLS = 5;
-
   const [cards, setCards] = useState([]);
-  const [scores, setScores] = useState({ team1: 0, team2: 0 });
+  const [scores, setScores] = useState({
+    team1: { score: 0, displayname: "קבוצה 1" },
+    team2: { score: 0, displayname: "קבוצה 2" },
+  });
   const [answeredQuestions, setAnsweredQuestions] = useState([]);
   const [currentTeam, setCurrentTeam] = useState(0);
   const setScore = (correct, score) => {
     setScores((scores) => ({
       ...scores,
-      [`team${currentTeam + 1}`]:
-        scores[`team${currentTeam + 1}`] + correct ? +score * 100 : 0,
+      [`team${currentTeam + 1}`]: {
+        ...scores[`team${currentTeam + 1}`],
+        score:
+          scores[`team${currentTeam + 1}`].score + correct ? +score * 100 : 0,
+      },
+      // scores[`team${currentTeam + 1}`] + correct ? +score * 100 : 0,
     }));
     setCurrentTeam((currentTeam) => (currentTeam + 1) % 2);
   };
@@ -45,8 +49,8 @@ export default function Home() {
   useEffect(() => {
     async function fetchQuestions() {
       const cardsData = await getAllQuestions();
-      const groupedByLevel = groupBy(cardsData, "level");
-      setCards(groupedByLevel);
+      const groupedByCategory = groupBy(cardsData, "subject");
+      setCards(groupedByCategory);
     }
     fetchQuestions();
   }, []);
@@ -60,23 +64,26 @@ export default function Home() {
 
       <main></main>
       <Grid container>
-        {map(cards, (cardsLevel, level) => {
+        {map(cards, (cardsCategory, subject) => {
           return (
             <Grid
               container
               item
-              key={level}
-              direction="row"
+              xs
+              key={subject}
+              direction="column"
               padding={2}
               spacing={2}
             >
-              {map(cardsLevel, ({ id, ...rest }) => (
+              <Grid xs item textAlign="center">
+                <Typography variant="h4">{subject}</Typography>
+              </Grid>
+              {map(sortBy(cardsCategory, "level"), ({ id, ...rest }) => (
                 <Card
                   disabled={answeredQuestions.includes(id)}
                   key={id}
                   {...rest}
                   id={id}
-                  level={level}
                   scoresController={setScore}
                   markAnswered={setAnsweredQuestions}
                 />
@@ -85,8 +92,11 @@ export default function Home() {
           );
         })}
       </Grid>
-      <Fab variant="extended" size="small" color="primary" aria-label="add">
-        קבוצה 1: {scores.team1} קבוצה 2: {scores.team2}
+      <Fab variant="extended" size="large" color="primary">
+        {Object.keys(scores).map(
+          (team) => `${scores[team].displayname} : ${scores[team].score}`
+        )}
+        {/* קבוצה 1: {scores.team1} קבוצה 2: {scores.team2} */}
       </Fab>
     </div>
   );

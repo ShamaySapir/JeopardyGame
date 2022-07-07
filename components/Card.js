@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import QuestionContent from "./questionContent";
 
-export default function BasicCard({ question, level, disabled, ...rest }) {
+export default function BasicCard({ subject, level, disabled, ...rest }) {
   const [open, setOpen] = React.useState(false);
   const handleClickOpen = () => {
     setOpen(true);
@@ -34,14 +34,13 @@ export default function BasicCard({ question, level, disabled, ...rest }) {
         onClick={(!disabled && handleClickOpen) || noop}
         disabled
       >
-        <CardHeader title={question}></CardHeader>
+        <CardHeader title={level * 100}></CardHeader>
       </Card>
       <QuestionContent
         isOpen={open}
         handleClose={handleClose}
         {...rest}
         disabled={disabled}
-        question={question}
         level={level}
       />
     </Grid>

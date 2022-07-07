@@ -1,4 +1,4 @@
-const uri = "http://localhost:1337/api";
+const uri = "http://192.168.1.24:1337/api";
 
 const routes = {
   listQuestions: {
