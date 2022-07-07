@@ -11,7 +11,6 @@ import {
   IconButton,
   Slide,
   Grid,
-  Box,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import Modal from "./modal";
