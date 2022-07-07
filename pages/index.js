@@ -1,10 +1,17 @@
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
-import { Grid, Fab, Typography, Snackbar, Alert } from "@mui/material";
+import { Grid, Typography, Snackbar, Alert, Button } from "@mui/material";
 import Card from "../components/Card";
-import { groupBy, map, reduce, sortBy } from "lodash";
+import { groupBy, map, reduce, sortBy, maxBy, minBy } from "lodash";
 import React, { useEffect, useState } from "react";
 import fetchClient from "../tools/requestor";
+import WinningModal from "../components/winningModal";
+
+const gameStates = {
+  started: "started",
+  ended: "ended",
+};
+
 export default function Home() {
   const [cards, setCards] = useState([]);
   const [scores, setScores] = useState({
@@ -13,16 +20,28 @@ export default function Home() {
   });
   const [answeredQuestions, setAnsweredQuestions] = useState([]);
   const [currentTeam, setCurrentTeam] = useState(0);
+  const [gameWinner, setGameWinner] = useState(null);
+  const [gameState, setGameState] = useState(gameStates.started);
+
   const setScore = (correct, score) => {
     setScores((scores) => ({
       ...scores,
       [`team${currentTeam + 1}`]: {
         ...scores[`team${currentTeam + 1}`],
         score:
-          scores[`team${currentTeam + 1}`].score + correct ? +score * 100 : 0,
+          scores[`team${currentTeam + 1}`].score + (correct ? +score * 100 : 0),
       },
     }));
     setCurrentTeam((currentTeam) => (currentTeam + 1) % 2);
+  };
+  const endGame = () => {
+    let winner = maxBy(Object.values(scores), "score").displayname;
+    const loser = minBy(Object.values(scores), "score").displayname;
+    if (winner === loser) {
+      winner = null;
+    }
+    setGameWinner(winner);
+    setGameState(gameStates.ended);
   };
   const getAllQuestions = async () => {
     const rawQuestionsData = await fetchClient("listQuestions");
@@ -113,9 +132,16 @@ export default function Home() {
                 התור הנוכחי:{`${scores[`team${currentTeam + 1}`].displayname}`}
               </Typography>
             </Grid>
+            <Grid container item justifyContent="center">
+              <Button onClick={endGame}>סיים משחק</Button>
+            </Grid>
           </Grid>
         </Alert>
       </Snackbar>
+      <WinningModal
+        isOpen={gameState === gameStates.ended}
+        winner={gameWinner}
+      />
     </div>
   );
 }
