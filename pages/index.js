@@ -12,6 +12,15 @@ export default function Home() {
   const [cards, setCards] = useState([]);
   const [scores, setScores] = useState({ team1: 0, team2: 0 });
   const [answeredQuestions, setAnsweredQuestions] = useState([]);
+  const [currentTeam, setCurrentTeam] = useState(0);
+  const setScore = (correct, score) => {
+    setScores((scores) => ({
+      ...scores,
+      [`team${currentTeam + 1}`]:
+        scores[`team${currentTeam + 1}`] + correct ? +score * 100 : 0,
+    }));
+    setCurrentTeam((currentTeam) => (currentTeam + 1) % 2);
+  };
   const getAllQuestions = async () => {
     const rawQuestionsData = await fetchClient("listQuestions");
     const questions = reduce(
@@ -68,7 +77,7 @@ export default function Home() {
                   {...rest}
                   id={id}
                   level={level}
-                  scoresController={setScores}
+                  scoresController={setScore}
                   markAnswered={setAnsweredQuestions}
                 />
               ))}

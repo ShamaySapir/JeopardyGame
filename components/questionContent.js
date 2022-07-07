@@ -55,10 +55,7 @@ export default function BasicCard({
     // }
     const isAnsweredCorrectly = correctAnswer === idx;
     setIsAnsweredCorrectly(isAnsweredCorrectly);
-    scoresController((state) => ({
-      ...state,
-      team1: state.team1 + (isAnsweredCorrectly ? level * 100 : 0),
-    }));
+    scoresController(isAnsweredCorrectly, level);
     markAnswered((answered) => [...answered, id]);
   };
   return (
