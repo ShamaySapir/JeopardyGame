@@ -21,7 +21,6 @@ export default function Home() {
         score:
           scores[`team${currentTeam + 1}`].score + correct ? +score * 100 : 0,
       },
-      // scores[`team${currentTeam + 1}`] + correct ? +score * 100 : 0,
     }));
     setCurrentTeam((currentTeam) => (currentTeam + 1) % 2);
   };
@@ -93,10 +92,13 @@ export default function Home() {
         })}
       </Grid>
       <Fab variant="extended" size="large" color="primary">
-        {Object.keys(scores).map(
-          (team) => `${scores[team].displayname} : ${scores[team].score}`
-        )}
-        {/* קבוצה 1: {scores.team1} קבוצה 2: {scores.team2} */}
+        <Grid container>
+          {Object.keys(scores).map((team) => (
+            <Grid xs item padding={2} spacing={2} key={team}>
+              <Typography>{`${scores[team].displayname} : ${scores[team].score}`}</Typography>
+            </Grid>
+          ))}
+        </Grid>
       </Fab>
     </div>
   );
