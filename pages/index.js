@@ -24,6 +24,7 @@ export default function Home() {
           level: questionData.attributes.rank,
           type: questionData.attributes.type,
           possibleAnswers: questionData.attributes.possibleAnswers,
+          correctAnswer: questionData.attributes.correctAnswer,
         };
         acc.push(question);
         return acc;

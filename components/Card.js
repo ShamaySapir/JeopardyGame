@@ -44,6 +44,7 @@ export default function BasicCard({ question, level, ...rest }) {
         isOpen={open}
         handleClose={handleClose}
         {...rest}
+        question={question}
         level={level}
       />
     </Grid>
