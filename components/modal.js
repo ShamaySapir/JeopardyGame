@@ -1,5 +1,7 @@
 import * as React from "react";
-import { Modal, Box, Button, Typography } from "@mui/material";
+import { Modal, Box, Typography } from "@mui/material";
+import ThumbUpIcon from "@mui/icons-material/ThumbUp";
+import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 
 const style = {
   position: "absolute",
@@ -24,7 +26,9 @@ export default function NestedModal({
     <div>
       <Modal open={isOpen} onClose={() => handleClose(false)}>
         <Box sx={{ ...style, width: 400 }}>
-          <Typography>{`${isCorrectAnswer}`}</Typography>
+          {(isCorrectAnswer && <ThumbUpIcon fontSize="large" />) || (
+            <ThumbDownIcon fontSize="large" />
+          )}
         </Box>
       </Modal>
     </div>

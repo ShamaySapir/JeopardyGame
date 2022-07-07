@@ -1,13 +1,5 @@
 import * as React from "react";
-import {
-  CardActions,
-  CardActionArea,
-  CardContent,
-  Button,
-  Card,
-  CardHeader,
-  Grid,
-} from "@mui/material";
+import { Card, CardHeader, Grid } from "@mui/material";
 import QuestionContent from "./questionContent";
 
 export default function BasicCard({ subject, level, disabled, ...rest }) {

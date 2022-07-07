@@ -71,10 +71,16 @@ export default function BasicCard({
         dir="rtl"
       >
         <AppBar sx={{ position: "relative" }} dir="rtl">
-          <Toolbar variant="dense">
+          <Toolbar
+            variant="dense"
+            sx={{ backgroundColor: "white", color: "black" }}
+          >
             <Grid container textAlign="center">
-              <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-                {subject}-{level * 100}
+              <Typography sx={{ ml: 2, flex: 1 }} variant="h3" color="green">
+                {subject}
+              </Typography>
+              <Typography sx={{ ml: 2, flex: 1 }} variant="h3" color="green">
+                {level * 100}
               </Typography>
             </Grid>
             <Button autoFocus color="inherit" onClick={handleClose}>
@@ -87,18 +93,27 @@ export default function BasicCard({
 
         <Grid container xs item justifyContent="center" direction="column">
           <Grid item textAlign="center">
-            <Typography variant="h2">{question}</Typography>
+            <Typography
+              variant="h2"
+              color="white"
+              sx={{ backgroundColor: "#1976d2" }}
+            >
+              {question}
+            </Typography>
           </Grid>
-          <Grid item xs style={{ alignSelf: "center" }}>
+          <Grid item xs>
             <List>
               {possibleAnswers.map((ans, idx) => (
-                <Grid item xs key={idx}>
+                <Grid item key={idx}>
                   <ListItemButton
                     key={idx}
                     selected={selectedIndex.has(idx)}
                     onClick={() => onSelect(ans, idx, correctAnswer, id)}
                   >
-                    <ListItemText primary={ans} />
+                    <ListItemText
+                      primary={<Typography variant="h4">{ans}</Typography>}
+                      style={{ textAlign: "center" }}
+                    />
                   </ListItemButton>
                 </Grid>
               ))}
