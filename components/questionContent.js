@@ -10,6 +10,7 @@ import {
   ListItemButton,
   IconButton,
   Slide,
+  Grid,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import Modal from "./modal";
@@ -69,34 +70,31 @@ export default function BasicCard({
       >
         <AppBar sx={{ position: "relative" }} dir="rtl">
           <Toolbar>
-            <IconButton
-              edge="start"
-              color="inherit"
-              onClick={handleClose}
-              aria-label="close"
-            >
-              <CloseIcon />
-            </IconButton>
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
               {question}
             </Typography>
             <Button autoFocus color="inherit" onClick={handleClose}>
-              {answer}
+              <IconButton edge="start" color="inherit" onClick={handleClose}>
+                <CloseIcon />
+              </IconButton>
             </Button>
           </Toolbar>
         </AppBar>
-        <List>
-          {possibleAnswers.map((ans, idx) => (
-            <ListItemButton
-              key={idx}
-              selected={selectedIndex.has(idx)}
-              // selected={selectedIndex.has(idx)}
-              onClick={() => onSelect(ans, idx, correctAnswer, id)}
-            >
-              <ListItemText primary={ans} />
-            </ListItemButton>
-          ))}
-        </List>
+        <Grid container item justifyContent="center">
+          <List>
+            {possibleAnswers.map((ans, idx) => (
+              <Grid item key={idx}>
+                <ListItemButton
+                  key={idx}
+                  selected={selectedIndex.has(idx)}
+                  onClick={() => onSelect(ans, idx, correctAnswer, id)}
+                >
+                  <ListItemText primary={ans} />
+                </ListItemButton>
+              </Grid>
+            ))}
+          </List>
+        </Grid>
       </Dialog>
       <Modal
         isOpen={questionAnswered}

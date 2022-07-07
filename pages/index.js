@@ -1,6 +1,6 @@
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
-import { Grid, Fab, Typography } from "@mui/material";
+import { Grid, Fab, Typography, Snackbar, Alert } from "@mui/material";
 import Card from "../components/Card";
 import { groupBy, map, reduce, sortBy } from "lodash";
 import React, { useEffect, useState } from "react";
@@ -100,6 +100,11 @@ export default function Home() {
           ))}
         </Grid>
       </Fab>
+      <Snackbar open autoHideDuration={6000}>
+        <Alert severity="success" sx={{ width: "100%" }}>
+          {currentTeam}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }
