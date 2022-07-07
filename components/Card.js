@@ -35,9 +35,6 @@ export default function BasicCard({ question, level, ...rest }) {
         <CardHeader title={question}></CardHeader>
         <CardActionArea>
           <CardContent></CardContent>
-          <CardActions>
-            <Button size="small">Learn More</Button>
-          </CardActions>
         </CardActionArea>
       </Card>
       <QuestionContent

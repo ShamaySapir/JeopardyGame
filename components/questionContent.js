@@ -28,6 +28,7 @@ export default function BasicCard({
   type,
   possibleAnswers,
   correctAnswer,
+  scoresController,
 }) {
   const [selected, setSelected] = React.useState(new Set());
   const [selectedIndex, setSelectedIndex] = React.useState(new Set());
@@ -51,7 +52,12 @@ export default function BasicCard({
     setSelected((selected) => new Set([...Array.from(selected), ans]));
     setQuestionAnswered(true);
     // }
-    setIsAnsweredCorrectly(correctAnswer === idx);
+    const isAnsweredCorrectly = correctAnswer === idx;
+    setIsAnsweredCorrectly(isAnsweredCorrectly);
+    scoresController((state) => ({
+      ...state,
+      team1: state.team1 + (isAnsweredCorrectly ? level * 100 : 0),
+    }));
   };
   return (
     <>

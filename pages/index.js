@@ -1,7 +1,6 @@
 import Head from "next/head";
-import Image from "next/image";
 import styles from "../styles/Home.module.css";
-import { Grid } from "@mui/material";
+import { Grid, Fab } from "@mui/material";
 import Card from "../components/Card";
 import { groupBy, map, reduce } from "lodash";
 import React, { useEffect, useState } from "react";
@@ -11,7 +10,7 @@ export default function Home() {
   const NUM_OF_COLS = 5;
 
   const [cards, setCards] = useState([]);
-
+  const [scores, setScores] = useState({ team1: 0, team2: 0 });
   const getAllQuestions = async () => {
     const rawQuestionsData = await fetchClient("listQuestions");
     const questions = reduce(
@@ -39,14 +38,6 @@ export default function Home() {
       const groupedByLevel = groupBy(cardsData, "level");
       setCards(groupedByLevel);
     }
-    // const cardsData = Array.from(Array(NUM_OF_ROWS * NUM_OF_COLS).keys()).map(
-    //   (id) => ({
-    //     id,
-    //     level: Math.floor(id / NUM_OF_ROWS) + 1,
-    //     subject: "family" + Math.floor(id / NUM_OF_ROWS) + 1,
-    //     question: "family" + Math.floor(id / NUM_OF_ROWS) + 1,
-    //   })
-    // );
     fetchQuestions();
   }, []);
   return (
@@ -61,7 +52,6 @@ export default function Home() {
       <Grid container>
         {map(cards, (cardsLevel, level) => {
           return (
-            // <Grid container direction="column">
             <Grid
               container
               item
@@ -71,13 +61,20 @@ export default function Home() {
               spacing={2}
             >
               {map(cardsLevel, ({ id, ...rest }) => (
-                <Card key={id} {...rest} level={level} />
+                <Card
+                  key={id}
+                  {...rest}
+                  level={level}
+                  scoresController={setScores}
+                />
               ))}
             </Grid>
-            // </Grid>
           );
         })}
       </Grid>
+      <Fab variant="extended" size="small" color="primary" aria-label="add">
+        קבוצה 1: {scores.team1} קבוצה 2: {scores.team2}
+      </Fab>
     </div>
   );
 }

@@ -22,7 +22,6 @@ export default function NestedModal({
 }) {
   return (
     <div>
-      {/* <Button onClick={handleOpen}>Open modal</Button> */}
       <Modal open={isOpen} onClose={() => handleClose(false)}>
         <Box sx={{ ...style, width: 400 }}>
           <Typography>{`${isCorrectAnswer}`}</Typography>
