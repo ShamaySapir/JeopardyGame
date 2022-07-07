@@ -29,12 +29,13 @@ export default function BasicCard({
   possibleAnswers,
   correctAnswer,
   scoresController,
+  markAnswered,
 }) {
   const [selected, setSelected] = React.useState(new Set());
   const [selectedIndex, setSelectedIndex] = React.useState(new Set());
   const [questionAnswered, setQuestionAnswered] = React.useState(false);
   const [isAnsweredCorrectly, setIsAnsweredCorrectly] = React.useState(false);
-  const onSelect = (ans, idx, correctAnswer) => {
+  const onSelect = (ans, idx, correctAnswer, id) => {
     // if (selectedIndex.has(idx)) {
     //   // remove answer
     //   setSelectedIndex(
@@ -58,6 +59,7 @@ export default function BasicCard({
       ...state,
       team1: state.team1 + (isAnsweredCorrectly ? level * 100 : 0),
     }));
+    markAnswered((answered) => [...answered, id]);
   };
   return (
     <>
@@ -92,7 +94,7 @@ export default function BasicCard({
               key={idx}
               selected={selectedIndex.has(idx)}
               // selected={selectedIndex.has(idx)}
-              onClick={() => onSelect(ans, idx, correctAnswer)}
+              onClick={() => onSelect(ans, idx, correctAnswer, id)}
             >
               <ListItemText primary={ans} />
             </ListItemButton>

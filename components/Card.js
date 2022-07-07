@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import QuestionContent from "./questionContent";
 
-export default function BasicCard({ question, level, ...rest }) {
+export default function BasicCard({ question, level, disabled, ...rest }) {
   const [open, setOpen] = React.useState(false);
   const handleClickOpen = () => {
     setOpen(true);
@@ -18,6 +18,7 @@ export default function BasicCard({ question, level, ...rest }) {
   const handleClose = () => {
     setOpen(false);
   };
+  const noop = () => {};
 
   const rankedColors = {
     1: "#5658c1",
@@ -29,18 +30,17 @@ export default function BasicCard({ question, level, ...rest }) {
   return (
     <Grid item xs>
       <Card
-        style={{ backgroundColor: rankedColors[level] }}
-        onClick={handleClickOpen}
+        style={{ backgroundColor: !disabled ? rankedColors[level] : "grey" }}
+        onClick={(!disabled && handleClickOpen) || noop}
+        disabled
       >
         <CardHeader title={question}></CardHeader>
-        <CardActionArea>
-          <CardContent></CardContent>
-        </CardActionArea>
       </Card>
       <QuestionContent
         isOpen={open}
         handleClose={handleClose}
         {...rest}
+        disabled={disabled}
         question={question}
         level={level}
       />

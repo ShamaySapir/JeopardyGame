@@ -11,6 +11,7 @@ export default function Home() {
 
   const [cards, setCards] = useState([]);
   const [scores, setScores] = useState({ team1: 0, team2: 0 });
+  const [answeredQuestions, setAnsweredQuestions] = useState([]);
   const getAllQuestions = async () => {
     const rawQuestionsData = await fetchClient("listQuestions");
     const questions = reduce(
@@ -62,10 +63,13 @@ export default function Home() {
             >
               {map(cardsLevel, ({ id, ...rest }) => (
                 <Card
+                  disabled={answeredQuestions.includes(id)}
                   key={id}
                   {...rest}
+                  id={id}
                   level={level}
                   scoresController={setScores}
+                  markAnswered={setAnsweredQuestions}
                 />
               ))}
             </Grid>
