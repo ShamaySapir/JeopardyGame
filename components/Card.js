@@ -28,9 +28,12 @@ export default function BasicCard({ subject, level, disabled, ...rest }) {
     5: "#b81f1f",
   };
   return (
-    <Grid item xs>
+    <Grid item textAlign="center">
       <Card
-        style={{ backgroundColor: !disabled ? rankedColors[level] : "grey" }}
+        style={{
+          backgroundColor: !disabled ? rankedColors[level] : "grey",
+          minHeight: "12vh",
+        }}
         onClick={(!disabled && handleClickOpen) || noop}
         disabled
       >
@@ -40,6 +43,7 @@ export default function BasicCard({ subject, level, disabled, ...rest }) {
         isOpen={open}
         handleClose={handleClose}
         {...rest}
+        subject={subject}
         disabled={disabled}
         level={level}
       />

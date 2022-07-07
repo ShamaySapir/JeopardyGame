@@ -11,6 +11,7 @@ import {
   IconButton,
   Slide,
   Grid,
+  Box,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import Modal from "./modal";
@@ -27,6 +28,7 @@ export default function BasicCard({
   answer = "",
   level,
   type,
+  subject,
   possibleAnswers,
   correctAnswer,
   scoresController,
@@ -69,10 +71,12 @@ export default function BasicCard({
         dir="rtl"
       >
         <AppBar sx={{ position: "relative" }} dir="rtl">
-          <Toolbar>
-            <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-              {question}
-            </Typography>
+          <Toolbar variant="dense">
+            <Grid container textAlign="center">
+              <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+                {subject}-{level * 100}
+              </Typography>
+            </Grid>
             <Button autoFocus color="inherit" onClick={handleClose}>
               <IconButton edge="start" color="inherit" onClick={handleClose}>
                 <CloseIcon />
@@ -80,20 +84,26 @@ export default function BasicCard({
             </Button>
           </Toolbar>
         </AppBar>
-        <Grid container item justifyContent="center">
-          <List>
-            {possibleAnswers.map((ans, idx) => (
-              <Grid item key={idx}>
-                <ListItemButton
-                  key={idx}
-                  selected={selectedIndex.has(idx)}
-                  onClick={() => onSelect(ans, idx, correctAnswer, id)}
-                >
-                  <ListItemText primary={ans} />
-                </ListItemButton>
-              </Grid>
-            ))}
-          </List>
+
+        <Grid container xs item justifyContent="center" direction="column">
+          <Grid item textAlign="center">
+            <Typography variant="h2">{question}</Typography>
+          </Grid>
+          <Grid item xs style={{ alignSelf: "center" }}>
+            <List>
+              {possibleAnswers.map((ans, idx) => (
+                <Grid item xs key={idx}>
+                  <ListItemButton
+                    key={idx}
+                    selected={selectedIndex.has(idx)}
+                    onClick={() => onSelect(ans, idx, correctAnswer, id)}
+                  >
+                    <ListItemText primary={ans} />
+                  </ListItemButton>
+                </Grid>
+              ))}
+            </List>
+          </Grid>
         </Grid>
       </Dialog>
       <Modal
